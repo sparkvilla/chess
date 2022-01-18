@@ -2,90 +2,104 @@ from piece import Piece
 from board import Board
 
 class Chess:
-    
+
     def __init__(self, board):
          self.board = board
          self.player = None
-         self.current_piece = None
-         self.new_position = None
+         self.piece = None
 
-    def get_obj_from_coords(self, x, y):
+    def get_piece_from_coords(self, x, y):
         """
-        This uses the gui chessboard coords ref system
+        Get the object at coordinates (x, y) using the pygame
+        positioning system and set it to piece
+
+        x: int
+           x coordinate from 0 to 8000
+        y: int
+           y coordinate from 0 to 8000
+
         """
         return self.board.get_obj_from_mouse(x, y)
 
-    def get_obj_from_an(self, an):
+    def set_piece_from_coords(self, x, y):
+        """
+        Get the object at coordinates (x, y) using the pygame
+        positioning system and set it to piece
+
+        x: int
+           x coordinate from 0 to 8000
+        y: int
+           y coordinate from 0 to 8000
+
+        """
+        self.piece = self.get_piece_from_coords(x, y)
+
+    def get_piece_from_an(self, an):
+        """
+        Get the object using algebraic notation and set it to piece
+
+        an: str
+           e.g. 'a1', 'd5' etc..
+        """
         return self.board.get_obj_at_pos(an)
 
-    def get_an(self, x, y):
+    def set_piece_from_an(self, an):
         """
-        This uses the internal chessboard coords ref system
+        Get the object using algebraic notation and set it to piece
+
+        an: str
+           e.g. 'a1', 'd5' etc..
         """
-        return self.board.COORDS[y//100, x//100]
-
-    def get_coords(self, an):
-        return self.board.COORDS[an]
-
-    def get_obj_middle(self, path):
-        obj_middle = None
-        for pos in path:
-            obj_middle = self.get_obj_from_an(pos)
-            if isinstance(obj_middle, Piece): 
-                break
-        return obj_middle
-
-    def king_check(self, color):
-
-        # get the king obj
-        obj_king = self.board.search_for_obj('king', color)
-
-        checkers = []
-
-        for an in obj_king.squares_up(stop=False):
-            obj = self.get_obj_from_an()
-            if obj.color == color:
-                break
-            checkers.append(obj)
-
-    def move(self, obj_start, obj_end, pos_end):
-        # if player select empty square
-        if not obj_start:
-            print(self.board.state)
-            return
-        pos_start = obj_start.current_pos 
-        # if end position is empty
-        if obj_end == 0:
-            obj_start.new_pos = pos_end
-            path = obj_start.get_path()
-            if not path:
-                return
-            else:
-                if not self.get_obj_middle(path):
-                    obj_start.move()
-                    self.board.update_obj_at_pos(pos_end, obj_start)
-                    self.board.update_obj_at_pos(pos_start, 0)
-                    print(self.board.state)
-        # if end position has piece of different color (eat it!)
-        elif isinstance(obj_end, Piece) and obj_start.color != obj_end.color:
-            obj_start.new_pos = pos_end
-            path = obj_start.get_path()
-            if not path:
-                return
-            else:
-                print(pos_end)
-                obj_middle = self.get_obj_middle(path)
-                if not obj_middle or obj_middle.current_pos == pos_end:
-                    obj_start.move()
-                    print(path)
-                    self.board.update_obj_at_pos(pos_end, obj_start)
-                    self.board.update_obj_at_pos(pos_start, 0)
-                    print(self.board.state)
+        self.piece = self.get_piece_from_an(an)
 
 
-    def draw_board(self, screen):
-        return self.board.draw_board(screen)
+    def get_piece_avail_pos(self):
+        avail = []
+        if not self.piece:
+            return avail
+        for path in self.piece.get_moves():
+            print(path)
+            for pos_an in path:
+                obj_middle = self.board.get_obj_at_pos(pos_an)
+                if obj_middle == 0:
+                    avail.append(pos_an)
+                else:
+                    break
+        return avail
+
+    def get_piece_edible_pos(self):
+        edibles = []
+        if not self.piece:
+            return edibles
+        for path in self.piece.get_moves():
+            for pos_an in path:
+                obj_middle = self.board.get_obj_at_pos(pos_an)
+                if isinstance(obj_middle, Piece) and obj_middle.color == self.piece.color:
+                    break
+                if isinstance(obj_middle, Piece) and obj_middle.color != self.piece.color:
+                    edibles.append(pos_an)
+                    break
+        return edibles
+
+    def move_piece(self, pos, pos_end):
+        if pos_end in pos:
+            self.board.update_obj_at_pos(self.piece, pos_end)
+            self.board.update_obj_at_pos(0, self.piece.current.an)
+            self.piece.move(pos_end)
 
 
-board = Board()
-chess = Chess(board)
+if __name__ == '__main__':
+    board = Board()
+    chess = Chess(board)
+    chess.get_piece_from_an('d1')
+    print(chess.piece)
+    print(chess.get_piece_avail_pos())
+    chess.get_piece_from_an('d7')
+    print(chess.piece)
+    print(chess.get_piece_avail_pos())
+    chess.get_piece_from_an('d8')
+    print(chess.piece)
+    print(chess.get_piece_avail_pos())
+    chess.get_piece_from_an('d6')
+    print(chess.piece)
+    print(chess.get_piece_avail_pos())
