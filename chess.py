@@ -1,5 +1,6 @@
 from piece import Piece
 from board import Board
+import pdb
 
 class Chess:
 
@@ -52,11 +53,25 @@ class Chess:
         """
         self.piece = self.get_piece_from_an(an)
 
+    def _is_middle_same_color(self, obj_middle):
+        return isinstance(obj_middle, Piece) and obj_middle.color == self.piece.color
+
+    def _is_middle_different_color(self, obj_middle):
+        return isinstance(obj_middle, Piece) and obj_middle.color != self.piece.color
 
     def get_piece_avail_pos(self):
         avail = []
         if not self.piece:
             return avail
+
+        if self.piece.type_ == 'knight':
+            for pos_an in self.piece.get_moves():
+                obj_middle = self.board.get_obj_at_pos(pos_an)
+                if self._is_middle_same_color(obj_middle):
+                    continue
+                avail.append(pos_an)
+            return avail
+
         for path in self.piece.get_moves():
             print(path)
             for pos_an in path:
@@ -69,14 +84,33 @@ class Chess:
 
     def get_piece_edible_pos(self):
         edibles = []
+
         if not self.piece:
             return edibles
+
+        if self.piece.type_ == 'knight':
+            for pos_an in self.piece.get_moves():
+                obj_middle = self.board.get_obj_at_pos(pos_an)
+                if self._is_middle_same_color(obj_middle):
+                    continue
+                if self._is_middle_different_color(obj_middle):
+                    edibles.append(pos_an)
+            return edibles
+
+        if self.piece.type_ == 'pawn':
+            for path in self.piece.get_edibles():
+                for pos_an in path:
+                    obj_middle = self.board.get_obj_at_pos(pos_an)
+                    if obj_middle and self._is_middle_different_color(obj_middle):
+                        edibles.append(pos_an)
+            return edibles
+
         for path in self.piece.get_moves():
             for pos_an in path:
                 obj_middle = self.board.get_obj_at_pos(pos_an)
-                if isinstance(obj_middle, Piece) and obj_middle.color == self.piece.color:
+                if self._is_middle_same_color(obj_middle):
                     break
-                if isinstance(obj_middle, Piece) and obj_middle.color != self.piece.color:
+                if self._is_middle_different_color(obj_middle):
                     edibles.append(pos_an)
                     break
         return edibles
