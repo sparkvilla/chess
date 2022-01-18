@@ -266,10 +266,40 @@ class Position:
             pos_diag_n_down.append(self.to_an((new_x, new_y)))
         return pos_diag_n_down
 
+    def get_l_pos(self, pos=None):
+        """
+        Return coordinates in upward direction from the current position (excluded)
+        to the position found after a number of steps. If steps is None goes until
+        the end position.
+
+        """
+        pos_start = self
+        pos_l = []
+
+        if pos:
+            pos_start = pos
+
+        l_down_left = pos_start.x - 1, pos_start.y + 2
+        l_down_right = pos_start.x + 1, pos_start.y + 2
+        l_up_left = pos_start.x - 1, pos_start.y - 2
+        l_up_right = pos_start.x + 1, pos_start.y - 2
+        l_left_up = pos_start.x - 2, pos_start.y - 1
+        l_left_down = pos_start.x - 2, pos_start.y + 1
+        l_right_up = pos_start.x + 2, pos_start.y - 1
+        l_right_down = pos_start.x + 2, pos_start.y + 1
+
+        l_coords = [l_down_left, l_down_right, l_up_left, l_up_right, l_left_up,
+                    l_left_down, l_right_up, l_right_down]
+
+        for new_x, new_y in l_coords:
+            if not 0 <= new_x <= 7 or not 0 <= new_y <= 7:
+                continue
+            pos_l.append(self.to_an((new_x, new_y)))
+        return pos_l
+
 Position.init()
 
 
 if __name__ == '__main__':
-    p = Position('e1')
-    print(p.get_diag_n_down_pos(1))
-    print(p.get_diag_p_down_pos(1))
+    p = Position('d5')
+    print(p.get_l_pos())
