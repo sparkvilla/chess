@@ -1,6 +1,4 @@
 from position import Position
-import pdb
-from position import Position
 
 class Piece:
     def __init__(self, position):
