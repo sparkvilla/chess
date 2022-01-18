@@ -2,18 +2,19 @@ import itertools
 import sys
 import pygame
 from pygame.locals import *
+from position import Position
 from piece import Piece, King, Queen, Rook, Bishop, Knight, Pawn
 import pdb
 
 pygame.init()
-COLOR_SCREEN = (217, 217, 217)
 
 TILE_SIZE = 100
 WIDTH, HEIGHT = 8 * TILE_SIZE, 8 * TILE_SIZE
 
+COLOR_GRAY = (169,169,169)
+COLOR_YELLOW = (255,255,51)
 COLOR1 = (238,238,210)
 COLOR2 = (118,150,86)
-LETTERS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 
 BACKGROUND = pygame.Surface((WIDTH, HEIGHT))
 colors = itertools.cycle((COLOR1, COLOR2))
@@ -21,68 +22,73 @@ text_font = pygame.font.SysFont(None, 26) # type -> 'pygame.font.Font'
 
 class Board:
 
-    NUMBERS_AN = ('8', '7', '6', '5', '4', '3', '2', '1')
-    LETTERS_AN = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h')
-    COORDS = {}
-
-    @classmethod
-    def _gen_coordinates(cls):
-        for row in range(8):
-            for col in range(8):
-                yield row, col
-
-    @classmethod
-    def init_coords(cls):
-        for row, col in Board._gen_coordinates():
-            Board.COORDS[Board.LETTERS_AN[col] + Board.NUMBERS_AN[row]] = row, col
-            Board.COORDS[row,col] = Board.LETTERS_AN[col]+Board.NUMBERS_AN[row]
-
     def __init__(self):
-        self.init_game()
+        self.init_board()
 
-    def init_game(self):
+    def init_board(self):
         self.state = [[0 for y in range(8)] for x in range(8)]
-        self.state[7][4] = King('e1', 'white', './imgs/king_w.png')
-        self.state[7][3] = Queen('d1', 'white', './imgs/queen_w.png')
-        self.state[7][2] = Bishop('c1', 'white', './imgs/bishop_w.png')
-        self.state[7][5] = Bishop('f1', 'white', './imgs/bishop_w.png')
-        self.state[7][1] = Knight('b1', 'white', './imgs/knight_w.png')
-        self.state[7][6] = Knight('g1', 'white', './imgs/knight_w.png')
-        self.state[7][0] = Rook('b1', 'white', './imgs/rook_w.png')
-        self.state[7][7] = Rook('g1', 'white', './imgs/rook_w.png')
+        self.state[7][4] = King(Position('e1'), 'white', './imgs/king_w.png')
+        self.state[7][3] = Queen(Position('d1'), 'white', './imgs/queen_w.png')
+        self.state[7][2] = Bishop(Position('c1'), 'white', './imgs/bishop_w.png')
+        self.state[7][5] = Bishop(Position('f1'), 'white', './imgs/bishop_w.png')
+        self.state[7][1] = Knight(Position('b1'), 'white', './imgs/knight_w.png')
+        self.state[7][6] = Knight(Position('g1'), 'white', './imgs/knight_w.png')
+        self.state[7][0] = Rook(Position('a1'), 'white', './imgs/rook_w.png')
+        self.state[7][7] = Rook(Position('h1'), 'white', './imgs/rook_w.png')
 
-        self.state[0][4] = King('e8', 'black', './imgs/king_b.png')
-        self.state[0][3] = Queen('d8', 'black', './imgs/queen_b.png')
-        self.state[0][2] = Bishop('c8', 'black', './imgs/bishop_b.png')
-        self.state[0][5] = Bishop('f8', 'black', './imgs/bishop_b.png')
-        self.state[0][1] = Knight('b8', 'black', './imgs/knight_b.png')
-        self.state[0][6] = Knight('g8', 'black', './imgs/knight_b.png')
-        self.state[0][0] = Rook('b8', 'black', './imgs/rook_b.png')
-        self.state[0][7] = Rook('g8', 'black', './imgs/rook_b.png')
+        self.state[0][4] = King(Position('e8'), 'black', './imgs/king_b.png')
+        self.state[0][3] = Queen(Position('d8'), 'black', './imgs/queen_b.png')
+        self.state[0][2] = Bishop(Position('c8'), 'black', './imgs/bishop_b.png')
+        self.state[0][5] = Bishop(Position('f8'), 'black', './imgs/bishop_b.png')
+        self.state[0][1] = Knight(Position('b8'), 'black', './imgs/knight_b.png')
+        self.state[0][6] = Knight(Position('g8'), 'black', './imgs/knight_b.png')
+        self.state[0][0] = Rook(Position('a8'), 'black', './imgs/rook_b.png')
+        self.state[0][7] = Rook(Position('h8'), 'black', './imgs/rook_b.png')
         for i in range(8):
-            self.state[6][i] = Pawn(self.LETTERS_AN[i]+'2', 'white', './imgs/pawn_w.png')
-            self.state[1][i] = Pawn(self.LETTERS_AN[i]+'7', 'black', './imgs/pawn_b.png')
+            self.state[6][i] = Pawn(Position(Position.LETTERS_AN[i]+'2'), 'white', './imgs/pawn_w.png')
+            self.state[1][i] = Pawn(Position(Position.LETTERS_AN[i]+'7'), 'black', './imgs/pawn_b.png')
 
     def get_obj_at_pos(self, an):
-        row, col = self.COORDS.get(an)
-        return self.state[row][col]
+        """
+        Get object from board using algebraic notation
+        """
+        x, y = Position.MAPPING.get(an)
+        return self.state[y][x]
 
-    def get_obj_from_mouse(self, row, col):
-        row, col = row // 100, col// 100
-        return self.state[col][row]
+    def get_obj_from_mouse(self, x, y):
+        """
+        Get object from board using pygame positioning coords
+        """
+        x, y = x // 100, y// 100
+        return self.state[y][x]
 
-    def update_obj_at_pos(self, an, obj):
-        row, col = self.COORDS.get(an)
-        self.state[row][col] = obj
+    def get_an_from_mouse(self, x, y):
+        """
+        Get position in algebraic notation from pygame positioning system
+        """
+        x, y = x // 100, y// 100
+        return Position.to_an((x, y))
 
-    def search_for_obj(self, type_, color):
+    def update_obj_at_pos(self, obj, an):
+        """
+        Update board state setting an object at position using
+        algebraic notation
+        """
+        x, y = Position.MAPPING.get(an)
+        self.state[y][x] = obj
+
+    def search_unique_obj(self, type_, color):
+        """
+        Search unique objects (type_ must be King or Queen) in the board
+
+        """
         for row in self.state:
             for obj in row:
                 if isinstance(obj, Piece):
                     if obj.type_ == type_ and obj.color == color:
                         return obj
 
-    def draw_board(self, screen):
+    def draw_layout(self, screen):
         for y in range(0, HEIGHT, TILE_SIZE):
             for x in range(0, WIDTH, TILE_SIZE):
                 rect = (x, y, TILE_SIZE, TILE_SIZE)
@@ -97,18 +103,18 @@ class Board:
             numbers.append((text, text_area))
         letters = []
         for l,x in enumerate(range(15, 800 , TILE_SIZE)):
-            text = text_font.render(LETTERS[l], True, (0, 0, 0)) # type -> 'pygame.Surface'
+            text = text_font.render(Position.LETTERS_AN[l], True, (0, 0, 0)) # type -> 'pygame.Surface'
             text_area = text.get_rect() # type -> 'pygame.Rect'
             text_area.center = (x, 790)
             numbers.append((text, text_area))
 
-        screen.fill(COLOR_SCREEN)
         for t, t_a in numbers:
             BACKGROUND.blit(t, t_a)
         for t1, t_a1 in letters:
             BACKGROUND.blit(t1, t_a1)
 
-        for key, val in self.COORDS.items():
+    def draw_pieces(self):
+        for key, val in Position.MAPPING.items():
             if isinstance(key, str):
                 obj = self.state[val[0]][val[1]]
                 if isinstance(obj, Piece):
@@ -116,6 +122,34 @@ class Board:
                     p_img = pygame.transform.scale(p_img, (75, 75))
                     BACKGROUND.blit(p_img, (100*val[1]+15, 100*val[0]+20))
 
+    def draw_avail_pos(self, ans):
+        ans = [Position.to_coord(an) for an in ans]
+        rects = []
+        for x, y in ans:
+            pygame.draw.circle(BACKGROUND, COLOR_GRAY, (100*x+52,100*y+52), 10)
+
+    def draw_edibl_pos(self, ans):
+        ans = [Position.to_coord(an) for an in ans]
+        rects = []
+        for x, y in ans:
+            pygame.draw.rect(BACKGROUND, COLOR_YELLOW, pygame.Rect(100*x, 100*y, 100, 100), 4)
+
+    def draw_board(self, screen, avail=None, edibl=None):
+        self.draw_layout(screen)
+        if avail:
+            self.draw_avail_pos(avail)
+        if edibl:
+            self.draw_edibl_pos(edibl)
+        self.draw_pieces()
         screen.blit(BACKGROUND, (0, 0))
 
-Board.init_coords()
+if __name__ == '__main__':
+    board= Board()
+    #qw = board.search_unique_obj('queen','white')
+
+    #qw = board.get_obj_at_pos('d1')
+    #print(qw.get_moves())
+    #qw.move('e2')
+    #print(qw.get_moves())
+    #rw = board.get_obj_at_pos('a1')
+    #print(rw.get_moves())
