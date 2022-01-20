@@ -31,6 +31,18 @@ class King(Piece):
             moves.append(move(1))
         return moves
 
+    def check(self, new_pos=None):
+        directions = []
+        allowed = [self.current.get_up_pos, self.current.get_down_pos,
+                   self.current.get_left_pos, self.current.get_right_pos,
+                   self.current.get_diag_p_up_pos, self.current.get_diag_p_down_pos,
+                   self.current.get_diag_n_up_pos, self.current.get_diag_n_down_pos,
+                   self.current.get_l_pos]
+
+        for move in allowed:
+            directions.append(move(pos=new_pos))
+        return directions
+
 class Queen(Piece):
     def __init__(self, position, color, image):
         super().__init__(position)
@@ -128,4 +140,5 @@ class Knight(Piece):
 
         return self.current.get_l_pos()
 
-wk = King(Position('d7'), 'white', 'img')
+if __name__ == '__main__':
+    wk = King(Position('e1'), 'white', 'img')
