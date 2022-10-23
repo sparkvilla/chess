@@ -27,26 +27,26 @@ class Board:
 
     def init_board(self):
         self.state = [[0 for y in range(8)] for x in range(8)]
-        self.state[7][4] = King(Position('e1'), 'white', './imgs/king_w.png')
-        self.state[7][3] = Queen(Position('d1'), 'white', './imgs/queen_w.png')
-        self.state[7][2] = Bishop(Position('c1'), 'white', './imgs/bishop_w.png')
-        self.state[7][5] = Bishop(Position('f1'), 'white', './imgs/bishop_w.png')
-        self.state[7][1] = Knight(Position('b1'), 'white', './imgs/knight_w.png')
-        self.state[7][6] = Knight(Position('g1'), 'white', './imgs/knight_w.png')
-        self.state[7][0] = Rook(Position('a1'), 'white', './imgs/rook_w.png')
-        self.state[7][7] = Rook(Position('h1'), 'white', './imgs/rook_w.png')
+        self.state[7][4] = King(Position('e1'), 1, './imgs/king_w.png')
+        self.state[7][3] = Queen(Position('d1'), 1, './imgs/queen_w.png')
+        self.state[7][2] = Bishop(Position('c1'), 1, './imgs/bishop_w.png')
+        self.state[7][5] = Bishop(Position('f1'), 1, './imgs/bishop_w.png')
+        self.state[7][1] = Knight(Position('b1'), 1, './imgs/knight_w.png')
+        self.state[7][6] = Knight(Position('g1'), 1, './imgs/knight_w.png')
+        self.state[7][0] = Rook(Position('a1'), 1, './imgs/rook_w.png')
+        self.state[7][7] = Rook(Position('h1'), 1, './imgs/rook_w.png')
 
-        self.state[0][4] = King(Position('e8'), 'black', './imgs/king_b.png')
-        self.state[0][3] = Queen(Position('d8'), 'black', './imgs/queen_b.png')
-        self.state[0][2] = Bishop(Position('c8'), 'black', './imgs/bishop_b.png')
-        self.state[0][5] = Bishop(Position('f8'), 'black', './imgs/bishop_b.png')
-        self.state[0][1] = Knight(Position('b8'), 'black', './imgs/knight_b.png')
-        self.state[0][6] = Knight(Position('g8'), 'black', './imgs/knight_b.png')
-        self.state[0][0] = Rook(Position('a8'), 'black', './imgs/rook_b.png')
-        self.state[0][7] = Rook(Position('h8'), 'black', './imgs/rook_b.png')
+        self.state[0][4] = King(Position('e8'), -1, './imgs/king_b.png')
+        self.state[0][3] = Queen(Position('d8'), -1, './imgs/queen_b.png')
+        self.state[0][2] = Bishop(Position('c8'), -1, './imgs/bishop_b.png')
+        self.state[0][5] = Bishop(Position('f8'), -1, './imgs/bishop_b.png')
+        self.state[0][1] = Knight(Position('b8'), -1, './imgs/knight_b.png')
+        self.state[0][6] = Knight(Position('g8'), -1, './imgs/knight_b.png')
+        self.state[0][0] = Rook(Position('a8'), -1, './imgs/rook_b.png')
+        self.state[0][7] = Rook(Position('h8'), -1, './imgs/rook_b.png')
         for i in range(8):
-            self.state[6][i] = Pawn(Position(Position.LETTERS_AN[i]+'2'), 'white', './imgs/pawn_w.png')
-            self.state[1][i] = Pawn(Position(Position.LETTERS_AN[i]+'7'), 'black', './imgs/pawn_b.png')
+            self.state[6][i] = Pawn(Position(Position.LETTERS_AN[i]+'2'), 1, './imgs/pawn_w.png')
+            self.state[1][i] = Pawn(Position(Position.LETTERS_AN[i]+'7'), -1, './imgs/pawn_b.png')
 
     def get_obj_at_pos(self, an):
         """

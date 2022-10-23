@@ -19,6 +19,7 @@ clock = pygame.time.Clock()
 
 board = Board()
 chess = Chess(board)
+current_player = 1 # white
 avail_pos = None
 edibl_pos = None
 
@@ -37,7 +38,7 @@ while not game_exit:
             else:
                 chess.set_piece_from_coords(x_start, y_start)
                 print(f'object: {chess.piece}')
-                if chess.piece == 0:
+                if chess.piece == 0 or chess.piece.color != current_player:
                     continue
 
                 avail_pos = chess.get_piece_avail_pos()
@@ -91,13 +92,15 @@ while not game_exit:
                 an_end = board.get_an_from_mouse(x_end, y_end)
                 # end position is non-empty
                 if chess.get_piece_from_an(an_end) and edibl_pos:
-                    chess.move_piece(edibl_pos, an_end)
+                    current_player = chess.move_piece(edibl_pos, an_end)
                 # end position is empty
                 elif avail_pos:
-                    chess.move_piece(avail_pos, an_end)
+                    current_player = chess.move_piece(avail_pos, an_end)
 
                 avail_pos = None
                 edibl_pos = None
+
+                print(current_player)
 
     screen.fill(COLOR_SCREEN)
     board.draw_board(screen, avail_pos, edibl_pos)

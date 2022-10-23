@@ -104,7 +104,7 @@ class Pawn(Piece):
 
         allowed_black = [self.current.get_down_pos]
 
-        allowed = allowed_white if self.color == 'white' else allowed_black
+        allowed = allowed_white if self.color == 1 else allowed_black
 
         for move in allowed:
             if self.counter == 0:
@@ -122,7 +122,7 @@ class Pawn(Piece):
         allowed_to_eat_black = [self.current.get_diag_p_down_pos,
                                 self.current.get_diag_n_down_pos]
 
-        allowed = allowed_to_eat_white if self.color == 'white' else allowed_to_eat_black
+        allowed = allowed_to_eat_white if self.color == 1 else allowed_to_eat_black
 
         for move in allowed:
             moves.append(move(1))
@@ -141,4 +141,4 @@ class Knight(Piece):
         return self.current.get_l_pos()
 
 if __name__ == '__main__':
-    wk = King(Position('e1'), 'white', 'img')
+    wk = King(Position('e1'), 1, 'img')

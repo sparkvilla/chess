@@ -7,7 +7,7 @@ class Chess:
 
     def __init__(self, board):
          self.board = board
-         self.player = None
+         self.player = 1
          self.piece = None
 
     def get_piece_from_coords(self, x, y):
@@ -186,6 +186,8 @@ class Chess:
             self.board.update_obj_at_pos(self.piece, pos_end)
             self.board.update_obj_at_pos(0, self.piece.current.an)
             self.piece.move(pos_end)
+            self.player *= -1
+        return self.player    
 
 
 if __name__ == '__main__':
