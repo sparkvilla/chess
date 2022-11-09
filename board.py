@@ -142,9 +142,47 @@ class Board:
             self.draw_edibl_pos(edibl)
         self.draw_pieces()
         screen.blit(BACKGROUND, (0, 0))
+    
+    def _extract(self, obj):
+        
+        if isinstance(obj, int):
+            return '--'
+        
+        if obj.color == 1:
+            color = 'w'
+        elif obj.color == -1:
+            color = 'b'
+        
+        if obj.type_ == "king":
+            return color+"K"
+        elif obj.type_ == "queen":
+            return color+"Q"
+        elif obj.type_ == "knight":
+            return color+"T"
+        elif obj.type_ == "rook":
+            return color+"R"
+        elif obj.type_ == "bishop":
+            return color+"B"
+        elif obj.type_ == "pawn":
+            return color+"P"
+
+    def draw_board_state(self):
+        print(f"""
+        8 {[self._extract(p) for p in self.state[7]]}
+        7 {[self._extract(p) for p in self.state[6]]}
+        6 {[self._extract(p) for p in self.state[5]]}
+        5 {[self._extract(p) for p in self.state[4]]}
+        4 {[self._extract(p) for p in self.state[3]]}
+        3 {[self._extract(p) for p in self.state[2]]}
+        2 {[self._extract(p) for p in self.state[1]]}
+        1 {[self._extract(p) for p in self.state[0]]}
+             a     b     c     d     e     f     g     h  
+        """)
+
 
 if __name__ == '__main__':
     board= Board()
+    board.draw_board_state() 
     #qw = board.search_unique_obj('queen','white')
 
     #qw = board.get_obj_at_pos('d1')
