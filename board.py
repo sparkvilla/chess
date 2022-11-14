@@ -168,14 +168,14 @@ class Board:
 
     def draw_board_state(self):
         print(f"""
-        8 {[self._extract(p) for p in self.state[7]]}
-        7 {[self._extract(p) for p in self.state[6]]}
-        6 {[self._extract(p) for p in self.state[5]]}
-        5 {[self._extract(p) for p in self.state[4]]}
-        4 {[self._extract(p) for p in self.state[3]]}
-        3 {[self._extract(p) for p in self.state[2]]}
-        2 {[self._extract(p) for p in self.state[1]]}
-        1 {[self._extract(p) for p in self.state[0]]}
+        8 {[self._extract(p) for p in self.state[0]]}
+        7 {[self._extract(p) for p in self.state[1]]}
+        6 {[self._extract(p) for p in self.state[2]]}
+        5 {[self._extract(p) for p in self.state[3]]}
+        4 {[self._extract(p) for p in self.state[4]]}
+        3 {[self._extract(p) for p in self.state[5]]}
+        2 {[self._extract(p) for p in self.state[6]]}
+        1 {[self._extract(p) for p in self.state[7]]}
              a     b     c     d     e     f     g     h  
         """)
 

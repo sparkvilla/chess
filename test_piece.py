@@ -1,73 +1,91 @@
 import pytest
-from piece import Piece
+from piece import *
 
 import pdb
 
-@pytest.fixture
-def p_e4():
-    return Piece('e4')
 
-def test_curr_pos_eq_next_pos(p_e4):
-    assert p_e4.current_pos == p_e4.new_pos
+def test_king_get_moves():
+    wK = King(Position("e1"), 1)
+    assert wK.get_moves() == [["e2"], [], ["d1"], ["f1"], ["f2"], [], ["d2"], []]
 
-def test_cursors_curr_ex_new(p_e4):
-    assert p_e4.new_pos_let == p_e4.curr_pos_let
-    assert p_e4.new_pos_num == p_e4.curr_pos_num
 
-def test_right_1step(p_e4):
-    assert p_e4.right(1) == 'f4'
+def test_king_check():
+    wK = King(Position("e1"), 1)
+    assert wK.check() == [
+        ["e2", "e3", "e4", "e5", "e6", "e7", "e8"],
+        [],
+        ["d1", "c1", "b1", "a1"],
+        ["f1", "g1", "h1"],
+        ["f2", "g3", "h4"],
+        [],
+        ["d2", "c3", "b4", "a5"],
+        [],
+        ["d3", "f3", "c2", "g2"],
+    ]
 
-def test_right_2steps(p_e4):
-    assert p_e4.right(2) == 'g4'
 
-def test_left_3steps(p_e4):
-    assert p_e4.left(3) == 'b4'
+def test_king_check_at_new_pos():
+    wK = King(Position("e1"), 1)
+    assert wK.check(Position("e2")) == [
+        ["e3", "e4", "e5", "e6", "e7", "e8"],
+        ["e1"],
+        ["d2", "c2", "b2", "a2"],
+        ["f2", "g2", "h2"],
+        ["f3", "g4", "h5"],
+        ["d1"],
+        ["d3", "c4", "b5", "a6"],
+        ["f1"],
+        ["d4", "f4", "c3", "c1", "g3", "g1"],
+    ]
 
-def test_diag_pos_up_2steps(p_e4):
-    assert p_e4.diag_pos_up(2) == 'g6'
 
-def test_diag_pos_down_3steps(p_e4):
-    assert p_e4.diag_pos_down(3) == 'b1'
+def test_pawn_get_moves():
+    wP = Pawn(Position("e2"), 1)
+    assert wP.get_moves() == [["e3", "e4"]]
 
-def test_diag_neg_up_2steps(p_e4):
-    assert p_e4.diag_neg_up(2) == 'c6'
 
-def test_diag_neg_down_3steps(p_e4):
-    assert p_e4.diag_neg_down(3) == 'h1'
+def test_pawn_get_edibles():
+    wP = Pawn(Position("e2"), 1)
+    assert wP.get_edibles() == [
+        ["f3"],
+        ["d3"],
+    ]
 
-def test_diag_neg_down_3steps(p_e4):
-    assert p_e4.diag_neg_down(3) == 'h1'
 
-def test_assign_next_pos():
-    p = Piece('a1')
-    p.new_pos = 'd1'
-    assert p.current_pos == 'a1'
-    assert p.new_pos == 'd1'
+def test_bishop_get_moves():
+    wB = Bishop(Position("e2"), 1)
+    assert wB.get_moves() == [
+        ["f3", "g4", "h5"],
+        ["d1"],
+        ["d3", "c4", "b5", "a6"],
+        ["f1"],
+    ]
 
-def test_squares_up_pos():
-    p = Piece('e4')
-    p.new_pos = 'e6'
-    assert p.squares_up() == ['e5', 'e6']
 
-def test_squares_up_pos_no_stop():
-    p = Piece('e4')
-    assert p.squares_up(stop=False) == ['e5', 'e6', 'e7', 'e8']
+def test_knight_get_moves():
+    wT = Knight(Position("b1"), 1)
+    assert wT.get_moves() == [["a3", "c3", "d2"]]
 
-def test_squares_diag_pos():
-    p = Piece('e4')
-    p.new_pos = 'h7'
-    assert p.squares_diag_pos_up() == ['f5', 'g6', 'h7']
-    p.new_pos = 'b1'
-    assert p.squares_diag_pos_down() == ['d3', 'c2', 'b1']
 
-def test_squares_diag_pos_no_stop():
-    p = Piece('a1')
-    p.new_pos = 'h8'
-    assert p.squares_diag_pos_up(stop=False) == ['b2', 'c3', 'd4', 'e5', 'f6', 'g7', 'h8']
+def test_rook_get_moves():
+    wR = Rook(Position("a1"), 1)
+    assert wR.get_moves() == [
+        ["a2", "a3", "a4", "a5", "a6", "a7", "a8"],
+        [],
+        [],
+        ["b1", "c1", "d1", "e1", "f1", "g1", "h1"],
+    ]
 
-def test_squares_diag_neg():
-    p = Piece('e4')
-    p.new_pos = 'a8'
-    assert p.squares_diag_neg_up() == ['d5', 'c6', 'b7', 'a8']
-    p.new_pos = 'h1'
-    assert p.squares_diag_neg_down() == ['f3', 'g2', 'h1']
+
+def test_queen_get_movs():
+    wR = Queen(Position("d1"), 1)
+    assert wR.get_moves() == [
+        ["d2", "d3", "d4", "d5", "d6", "d7", "d8"],
+        [],
+        ["c1", "b1", "a1"],
+        ["e1", "f1", "g1", "h1"],
+        ["e2", "f3", "g4", "h5"],
+        [],
+        ["c2", "b3", "a4"],
+        [],
+    ]
