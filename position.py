@@ -1,9 +1,10 @@
 import pdb
 
+
 class Position:
 
-    NUMBERS_AN = ('8', '7', '6', '5', '4', '3', '2', '1')
-    LETTERS_AN = ('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h')
+    NUMBERS_AN = ("8", "7", "6", "5", "4", "3", "2", "1")
+    LETTERS_AN = ("a", "b", "c", "d", "e", "f", "g", "h")
 
     MAPPING = {}
 
@@ -16,10 +17,9 @@ class Position:
     @classmethod
     def init(cls):
         for x, y in Position._gen_coordinates():
-            Position.MAPPING[Position.LETTERS_AN[x]
-                             + Position.NUMBERS_AN[y]] = x, y
-            Position.MAPPING[x, y] = Position.LETTERS_AN[x] \
-                                        + Position.NUMBERS_AN[y]
+            Position.MAPPING[Position.LETTERS_AN[x] + Position.NUMBERS_AN[y]] = x, y
+            Position.MAPPING[x, y] = Position.LETTERS_AN[x] + Position.NUMBERS_AN[y]
+
     def __init__(self, an):
         self.an = an
 
@@ -36,7 +36,7 @@ class Position:
         if not isinstance(value, tuple) and len(value) == 2:
             return False
         range_ = range(0, 9)
-        if value[0] not in range_  or value[1] not in range_:
+        if value[0] not in range_ or value[1] not in range_:
             return False
         return True
 
@@ -84,8 +84,8 @@ class Position:
             stop = pos_start.y - steps
             if stop < 0:
                 return pos_up
-        for new_y in range(pos_start.y-1, stop-1, -1):
-            pos_up.append(self.to_an((pos_start.x , new_y)))
+        for new_y in range(pos_start.y - 1, stop - 1, -1):
+            pos_up.append(self.to_an((pos_start.x, new_y)))
         return pos_up
 
     def get_down_pos(self, steps=None, pos=None):
@@ -106,8 +106,8 @@ class Position:
             stop = pos_start.y + steps
             if stop > 7:
                 return pos_down
-        for new_y in range(pos_start.y+1, stop+1):
-            pos_down.append(self.to_an((pos_start.x , new_y)))
+        for new_y in range(pos_start.y + 1, stop + 1):
+            pos_down.append(self.to_an((pos_start.x, new_y)))
         return pos_down
 
     def get_left_pos(self, steps=None, pos=None):
@@ -128,7 +128,7 @@ class Position:
             stop = pos_start.x - steps
             if stop < 0:
                 return pos_left
-        for new_x in range(pos_start.x-1, stop-1, -1):
+        for new_x in range(pos_start.x - 1, stop - 1, -1):
             pos_left.append(self.to_an((new_x, pos_start.y)))
         return pos_left
 
@@ -150,7 +150,7 @@ class Position:
             stop = pos_start.x + steps
             if stop > 7:
                 return pos_right
-        for new_x in range(pos_start.x+1, stop+1):
+        for new_x in range(pos_start.x + 1, stop + 1):
             pos_right.append(self.to_an((new_x, pos_start.y)))
         return pos_right
 
@@ -175,8 +175,8 @@ class Position:
             if stop_x > 7 or stop_y < 0:
                 return pos_diag_p_up
 
-        range_x = range(pos_start.x+1, stop_x+1)
-        range_y = range(pos_start.y-1, stop_y-1, -1)
+        range_x = range(pos_start.x + 1, stop_x + 1)
+        range_y = range(pos_start.y - 1, stop_y - 1, -1)
 
         for new_x, new_y in zip(range_x, range_y):
             pos_diag_p_up.append(self.to_an((new_x, new_y)))
@@ -203,8 +203,8 @@ class Position:
             if stop_x < 0 or stop_y > 7:
                 return pos_diag_p_down
 
-        range_x = range(pos_start.x-1, stop_x-1, -1)
-        range_y = range(pos_start.y+1, stop_y+1)
+        range_x = range(pos_start.x - 1, stop_x - 1, -1)
+        range_y = range(pos_start.y + 1, stop_y + 1)
 
         for new_x, new_y in zip(range_x, range_y):
             pos_diag_p_down.append(self.to_an((new_x, new_y)))
@@ -231,8 +231,8 @@ class Position:
             if stop_x < 0 or stop_y < 0:
                 return pos_diag_n_up
 
-        range_x = range(pos_start.x-1, stop_x-1, -1)
-        range_y = range(pos_start.y-1, stop_y-1, -1)
+        range_x = range(pos_start.x - 1, stop_x - 1, -1)
+        range_y = range(pos_start.y - 1, stop_y - 1, -1)
 
         for new_x, new_y in zip(range_x, range_y):
             pos_diag_n_up.append(self.to_an((new_x, new_y)))
@@ -259,8 +259,8 @@ class Position:
             if stop_x > 7 or stop_y > 7:
                 return pos_diag_n_down
 
-        range_x = range(pos_start.x+1, stop_x+1)
-        range_y = range(pos_start.y+1, stop_y+1)
+        range_x = range(pos_start.x + 1, stop_x + 1)
+        range_y = range(pos_start.y + 1, stop_y + 1)
 
         for new_x, new_y in zip(range_x, range_y):
             pos_diag_n_down.append(self.to_an((new_x, new_y)))
@@ -288,8 +288,16 @@ class Position:
         l_right_up = pos_start.x + 2, pos_start.y - 1
         l_right_down = pos_start.x + 2, pos_start.y + 1
 
-        l_coords = [l_down_left, l_down_right, l_up_left, l_up_right, l_left_up,
-                    l_left_down, l_right_up, l_right_down]
+        l_coords = [
+            l_down_left,
+            l_down_right,
+            l_up_left,
+            l_up_right,
+            l_left_up,
+            l_left_down,
+            l_right_up,
+            l_right_down,
+        ]
 
         for new_x, new_y in l_coords:
             if not 0 <= new_x <= 7 or not 0 <= new_y <= 7:
@@ -297,9 +305,10 @@ class Position:
             pos_l.append(self.to_an((new_x, new_y)))
         return pos_l
 
+
 Position.init()
 
 
-if __name__ == '__main__':
-    p = Position('d5')
+if __name__ == "__main__":
+    p = Position("d5")
     print(p.get_l_pos())

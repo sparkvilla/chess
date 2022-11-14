@@ -4,7 +4,14 @@ from board import Board
 
 import pdb
 
-def test_board_init():
+
+@pytest.fixture
+def board():
     board = Board()
-    pdb.set_trace()
-    print("hi")
+    return board
+
+
+def test_board_get_obj_at_pos(board):
+    obj = board.get_obj_at_pos("d1")
+    assert obj.type_ == "queen"
+    assert obj.color == 1
