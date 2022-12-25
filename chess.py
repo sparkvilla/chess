@@ -195,7 +195,6 @@ class Chess:
     def get_positions(self, piece=None, ignore_piece=None):
         """
         Return a set of available and edibles positions (an) for piece.
-
         If not specified, piece is the current set piece -> self.piece
 
         """
