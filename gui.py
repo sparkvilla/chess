@@ -49,6 +49,7 @@ while not game_exit:
 
                 if chess.check and chess.piece.type_ != "king":
                     print("check")
+                    print(chess.check)
                     chess.get_uncheck()
                     positions = chess.restricted
 

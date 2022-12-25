@@ -257,6 +257,9 @@ class Chess:
             self.piece.move(pos_end)
             if self.restricted:
                 self.restricted = None
+            if self.check and self.piece.type_ == "king":
+                self._initialize_kings_positions()
+                self.check = None
             self.player *= -1
         return self.player
 
